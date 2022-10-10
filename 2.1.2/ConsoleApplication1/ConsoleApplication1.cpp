@@ -2,7 +2,7 @@
 #include <vector>
 #include <fstream>
 using namespace std;
-ifstream in("input1.txt", ios::in);
+ifstream in("input.txt", ios::in);
 ofstream out("output.txt", ios::out);
 
 class Animal
@@ -355,6 +355,20 @@ public:
         this->wolf = wolf;
         this->hyena = hyena;
     }
+    Simulation(int n, int m, int t, int r, int w, vector<Rabbit*>& rabbit, vector<Wolf*>& wolf) : height(n), width(m), t(t), countRab(r), countWolf(w), countHyena(0)
+    {
+        field = new int* [height];
+        for (int i = 0; i < height; i++)
+        {
+            field[i] = new int[width];
+            for (int j = 0; j < width; j++)
+            {
+                field[i][j] = 0;
+            }
+        }
+        this->rabbit = rabbit;
+        this->wolf = wolf;
+    }
     ~Simulation() 
     {
         for (int i = 0; i < height; i++)
@@ -577,13 +591,13 @@ public:
                     countWolf--;
                 }
             }
-            print();
-            system("pause");
+            //print();
+            //system("pause");
         }
     }
     void print()
     {
-        system("cls");
+        //system("cls");
         for (int i = 0; i < countRab; i++)
         {
             field[rabbit[i]->gety()][rabbit[i]->getx()]++;
@@ -598,15 +612,15 @@ public:
             {
                 if (field[i][j] == 0)
                 {
-                    cout << "#";
+                    out << "#";
                 }
                 else
                 {
-                    cout << field[i][j];
+                    out << field[i][j];
                 }
                 field[i][j] = 0;
             }
-            cout << endl;
+            out << endl;
         }
         
         
@@ -618,7 +632,8 @@ int main()
     int n = 0, m = 0, t = 0;
     in >> n >> m >> t; //размеры поля и количество ходов
     int r = 0, w = 0, h = 0;
-    in >> r >> w >> h; //количество зайцев, волков и гиен
+    in >> r >> w;
+    //in >> r >> w >> h; //количество зайцев, волков и гиен
     int x = 0, y = 0, d = 0, k = 0;
 
     vector<Rabbit*> rabbits(r);
@@ -633,21 +648,23 @@ int main()
         in >> x >> y >> d >> k; //x,y - координаты волка, d - направление движения, k - постоянство волка
         wolf[i] = new Wolf(x, y, d, k, -1);
     }
-    vector<Hyena*> hyena(h);
-    for (int i = 0; i < h; i++)
-    {
-        in >> x >> y >> d >> k; //x,y - координаты волка, d - направление движения, k - постоянство волка
-        hyena[i] = new Hyena(x, y, d, k, -1);
-    }
+    //vector<Hyena*> hyena(h);
+    //for (int i = 0; i < h; i++)
+    //{
+    //    in >> x >> y >> d >> k; //x,y - координаты волка, d - направление движения, k - постоянство волка
+    //    hyena[i] = new Hyena(x, y, d, k, -1);
+    //}
 
-    Simulation a(n, m, t, r, w, h, rabbits, wolf, hyena);
-    a.print();
-    system("pause");
+    Simulation a(n, m, t, r, w, rabbits, wolf);
+    //Simulation a(n, m, t, r, w, h, rabbits, wolf, hyena);
+
+    //a.print();
+    //system("pause");
     a.getStarted();
     a.print();
     rabbits.clear();
     wolf.clear();
-    hyena.clear();
+    //hyena.clear();
     return 0;
 }
 
